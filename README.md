@@ -33,11 +33,7 @@ lsdata download 001-mini --version v0.1
 
 Datasets are cached under the platform's standard user cache directory (e.g.
 `%LOCALAPPDATA%\lsdata\Cache` on Windows, `~/.cache/lsdata` on Linux). Set the
-`LSDATA_CACHE_DIR` environment variable to use a different location — useful for:
-
-- pointing large datasets (e.g. `001-full`, ~40GB) at a disk with more free space
-- avoiding Windows `MAX_PATH` issues, since extracted OME-Zarr chunk trees nest
-  deeply and a long cache path can push individual file paths past 260 characters
+`LSDATA_CACHE_DIR` environment variable to use a different location.
 
 Downloading a dataset temporarily uses up to ~2x its size on disk (the zip archive
 plus the extracted copy); the archive is deleted once extraction succeeds.
