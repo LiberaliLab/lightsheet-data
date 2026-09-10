@@ -15,7 +15,11 @@ pip install lightsheet-data
 import lsdata
 
 lsdata.info()                            # list available datasets: name, size (GB), description
-p = lsdata.download('001-mini', 'v0.1')  # download dataset to local cache, return path
+p = lsdata.download('001-mini', 'v0.1')  # download dataset to local cache, return path, defaults to latest
+lsdata.clear_cache()                     # clear the full cache
+lsdata.clear_cache(version='v0.1')       # clear specific version, all datasets
+lsdata.clear_cache(name='001-mini')      # clear specific dataset across versions
+lsdata.clear_cache('001-mini', 'v0.1')   # clear specific dataset & version
 ```
 
 `download()` skips the network entirely if the dataset was already downloaded and
@@ -27,6 +31,7 @@ A CLI is also available:
 ```bash
 lsdata info
 lsdata download 001-mini --version v0.1
+lsdata clear-cache [--name 001-mini --version v0.1]
 ```
 
 ## Cache location
