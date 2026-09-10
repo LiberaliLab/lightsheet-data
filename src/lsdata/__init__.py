@@ -2,7 +2,7 @@
 
     import lsdata
     lsdata.info()
-    lsdata.download('001-mini', 'v0.1')
+    path = lsdata.download('001-mini', 'v0.1')
 """
 
 from __future__ import annotations

@@ -14,8 +14,8 @@ pip install lightsheet-data
 ```python
 import lsdata
 
-lsdata.info()                        # list available datasets: name, size (GB), description
-lsdata.download('001-mini', 'v0.1')  # -> Path to the extracted dataset in the local cache
+lsdata.info()                            # list available datasets: name, size (GB), description
+p = lsdata.download('001-mini', 'v0.1')  # download dataset to local cache, return path
 ```
 
 `download()` skips the network entirely if the dataset was already downloaded and
