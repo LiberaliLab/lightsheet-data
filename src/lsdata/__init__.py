@@ -13,7 +13,7 @@ from . import _cache, _zenodo
 from ._datasets import DatasetInfo, datasets_from_record
 
 __version__ = "0.1.0"
-__all__ = ["DatasetInfo", "info", "download"]
+__all__ = ["DatasetInfo", "info", "download", "clear_cache"]
 
 
 def _resolve(version: str | None) -> dict:
@@ -60,3 +60,14 @@ def download(name: str, version: str | None = None) -> Path:
         raise ValueError(f"Unknown dataset {name!r}. Available datasets: {available}")
 
     return _cache.ensure_downloaded(dataset)
+
+
+def clear_cache(name: str | None = None, version: str | None = None) -> list[Path]:
+    """Delete cached dataset(s) from local disk and return the paths removed.
+
+    - clear_cache(): wipe the entire cache (all versions, all datasets).
+    - clear_cache(version='v0.1'): wipe everything cached for that version.
+    - clear_cache(name='001-mini'): wipe that dataset across all cached versions.
+    - clear_cache(name='001-mini', version='v0.1'): wipe just that one entry.
+    """
+    return _cache.clear(name, version)

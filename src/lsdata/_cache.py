@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import sys
 import zipfile
 from pathlib import Path
@@ -13,6 +14,7 @@ import requests
 from platformdirs import user_cache_dir
 
 from ._datasets import DatasetInfo
+from ._zenodo import _normalize_version
 
 _COMPLETE_MARKER = ".lsdata_complete"
 _CHUNK_SIZE = 1024 * 1024  # 1MB
@@ -85,6 +87,41 @@ def _dataset_root(target: Path) -> Path:
     if len(entries) == 1 and entries[0].is_dir():
         return entries[0]
     return target
+
+
+def clear(name: str | None = None, version: str | None = None) -> list[Path]:
+    """Delete cached data and return the list of directories removed.
+
+    - clear(): wipe the entire cache root (all versions, all datasets).
+    - clear(version='v0.1'): wipe everything cached for that version.
+    - clear(name='001-mini'): wipe that dataset across all cached versions.
+    - clear(name='001-mini', version='v0.1'): wipe just that one entry.
+
+    Version matching tolerates a leading 'v' (like ensure_downloaded()). This
+    never hits the network — it only touches what's already on disk, so a
+    missing/mismatched name or version is simply a no-op, not an error.
+    """
+    root = cache_root()
+    if not root.exists():
+        return []
+
+    if name is None and version is None:
+        removed = [root]
+        shutil.rmtree(root)
+        return removed
+
+    version_dirs = [d for d in root.iterdir() if d.is_dir()]
+    if version is not None:
+        target_norm = _normalize_version(version)
+        version_dirs = [d for d in version_dirs if _normalize_version(d.name) == target_norm]
+
+    removed = []
+    for version_dir in version_dirs:
+        target = version_dir / name if name is not None else version_dir
+        if target.exists():
+            shutil.rmtree(target)
+            removed.append(target)
+    return removed
 
 
 def ensure_downloaded(dataset: DatasetInfo) -> Path:
