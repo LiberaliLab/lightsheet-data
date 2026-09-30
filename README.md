@@ -6,7 +6,7 @@ Zenodo: https://zenodo.org/records/22078388 (DOI `10.5281/zenodo.22078387`).
 Install (importable module is `lsdata`):
 
 ```bash
-pip install lightsheet-data
+pip install git+https://github.com/LiberaliLab/lightsheet-data.git
 ```
 
 ## Usage
